@@ -1,0 +1,79 @@
+version: '3.3'
+
+services:
+  php_sms_gateway:
+    container_name: sms_gateway_php
+    build:
+      context: ./dockerfiles/config/php
+    restart: always
+    volumes:
+      - .:/home/app/sms:Z
+      - ./dockerfiles/config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./dockerfiles/config/php/php.ini-production:/usr/local/etc/php/php.ini-production
+      - ./dockerfiles/config/php/php.ini-development:/usr/local/etc/php/php.ini-development
+      - ./dockerfiles/config/supervisor/queue.ini:/etc/supervisor.d/queue.ini
+    links:
+      - mysql_sms_gateway
+#    ports:
+#      - 127.0.0.1:9000:9000
+#      - 127.0.0.1:6001:6001
+
+  nginx_sms_gateway:
+    container_name: sms_gateway_nginx
+    build:
+      context: ./dockerfiles/config/nginx
+    restart: always
+    volumes:
+      - .:/home/app/sms
+    links:
+      - php_sms_gateway
+    ports:
+      - 127.0.0.1:82:80
+  #    - 443:443
+
+  sqlite3:
+    container_name: sms_gateway_sqlite
+    image: nouchka/sqlite3:latest
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/home/app/sms/database
+
+  mysql_sms_gateway:
+    image: mariadb:10.6
+    restart: always
+    container_name: sms_gateway_mysql
+    volumes:
+      - ./dockerfiles/config/mysql/data:/var/lib/mysql
+#      - ./db-init:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=sms
+      - MYSQL_USER=homestead
+      - MYSQL_PASSWORD=secret
+    ports:
+      - 127.0.0.1:3309:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sms_gateway_phpmyadmin
+    restart: always
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql_sms_gateway
+      - PMA_PORT=3306
+    ports:
+      - 127.0.0.1:83:80
+    volumes:
+      - /sessions
+    links:
+      - mysql_sms_gateway
+
+  redis:
+    image: redis:latest
+    container_name: sms_gateway_redis
+
+volumes:
+  pgsqldata:
+  composer-cache:
