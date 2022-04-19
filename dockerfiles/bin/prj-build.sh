@@ -1,5 +1,7 @@
 #!/bin/bash
 
+supervisord -c /etc/supervisor.conf
+
 # Install dependencies
 composer install --prefer-dist --no-interaction
 

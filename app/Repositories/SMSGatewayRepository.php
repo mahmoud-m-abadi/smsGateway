@@ -14,7 +14,6 @@ class SMSGatewayRepository implements SMSGatewayRepositoryInterface
         SMSGatewayResultInterface $gatewayModel
     )
     {
-
         $this->gatewayModel = $gatewayModel;
     }
 

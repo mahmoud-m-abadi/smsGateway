@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use App\Interfaces\Models\SMSGatewayResultInterface;
+use App\Interfaces\Repositories\SMSGatewayRepositoryInterface;
 use App\Interfaces\SMSProvider\SMSGatewayInterface;
 use App\Models\SMSGatewayResult;
+use App\Repositories\SMSGatewayRepository;
 use App\SMSProviders\KavehnegarProvider;
 use Illuminate\Support\ServiceProvider;
 use function PHPUnit\Framework\throwException;
@@ -37,6 +39,7 @@ class SMSGatewayProvider extends ServiceProvider
             return new $providerName();
         });
 
+        $this->app->bind(SMSGatewayRepositoryInterface::class, SMSGatewayRepository::class);
         $this->app->singleton(SMSGatewayResultInterface::class, SMSGatewayResult::class);
     }
 

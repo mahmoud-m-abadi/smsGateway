@@ -79,11 +79,13 @@ RUN apk add --no-cache $PHPIZE_DEPS \
     && pecl install xdebug \
     && docker-php-ext-enable xdebug
 RUN apk add --no-cache zlib fontconfig libx11 libxext libxrender sqlite
-RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev 
+RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev libjpeg-turbo-dev
 RUN pear config-set php_bin /usr/local/bin/php
 RUN pear install php_codesniffer
 WORKDIR $HOME/sms
 RUN apk add --no-cache supervisor
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
 # Implementations for crontab
 RUN apk add --update --no-cache libcap && \
