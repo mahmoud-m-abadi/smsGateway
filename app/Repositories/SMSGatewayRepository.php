@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\Models\SMSGatewayResultInterface;
 use App\Interfaces\Repositories\SMSGatewayRepositoryInterface;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class SMSGatewayRepository implements SMSGatewayRepositoryInterface
@@ -15,6 +16,14 @@ class SMSGatewayRepository implements SMSGatewayRepositoryInterface
     )
     {
         $this->gatewayModel = $gatewayModel;
+    }
+
+    /**
+     * @return LengthAwarePaginator
+     */
+    public function paginate(): LengthAwarePaginator
+    {
+        return $this->gatewayModel->paginate();
     }
 
     /**

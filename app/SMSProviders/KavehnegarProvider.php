@@ -41,17 +41,20 @@ class KavehnegarProvider implements SMSGatewayInterface
     {
         try {
             $response = Http::timeout(15)
-                ->post($this->url, [
-                    'receptor' => $to,
-                    'message' => $message,
-                    'sender' => $this->sender
-                ]);
+                ->get(
+                    $this->url,
+                    http_build_query([
+                        'receptor' => $to,
+                        'message' => htmlentities($message),
+                        'sender' => $this->sender
+                    ])
+                );
 
             $this->saveResult($to, $response->json(), $response->status());
         } catch (ConnectionException $exception) {
             $this->saveResult(
                 $to,
-                ["message" => "Timeout connection"],
+                ['return' => ['message' => 'Timeout connection']],
                 $exception->getCode()
             );
         }
@@ -65,11 +68,13 @@ class KavehnegarProvider implements SMSGatewayInterface
      */
     public function saveResult(string $to, array|string $jsonData, int $statusCode): void
     {
+        $result = is_string($jsonData) ? json_decode($jsonData) : $jsonData;
+
         event(
             new SMSSentEvent(
                 $to,
                 "Kavehnegar",
-                is_array($jsonData) ? json_encode($jsonData) : $jsonData,
+                $result['return'],
                 $statusCode
             )
         );

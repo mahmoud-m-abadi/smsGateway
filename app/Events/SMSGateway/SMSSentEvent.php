@@ -13,10 +13,10 @@ class SMSSentEvent
     /**
      * @param string $to
      * @param string $provider
-     * @param string $result
+     * @param array $result
      * @param int $statusCode
      */
-    public function __construct(string $to, string $provider, string $result, int $statusCode)
+    public function __construct(string $to, string $provider, array $result, int $statusCode)
     {
         $this->data = [
             'to' => $to,

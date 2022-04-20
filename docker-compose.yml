@@ -73,6 +73,8 @@ services:
   redis:
     image: redis:latest
     container_name: sms_gateway_redis
+    volumes:
+        - ./dockerfiles/config/redis/data:/data
 
 volumes:
   pgsqldata:

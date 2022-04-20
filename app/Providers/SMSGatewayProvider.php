@@ -8,7 +8,9 @@ use App\Interfaces\SMSProvider\SMSGatewayInterface;
 use App\Models\SMSGatewayResult;
 use App\Repositories\SMSGatewayRepository;
 use App\SMSProviders\KavehnegarProvider;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Str;
 use function PHPUnit\Framework\throwException;
 
 class SMSGatewayProvider extends ServiceProvider
@@ -21,14 +23,11 @@ class SMSGatewayProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(SMSGatewayInterface::class, function ($app) {
-            $smsGateways = [
-                'Kavehnegar',
-                'Ghasedak',
-            ];
-
             $configProvider = env('SMS_PROVIDER', 'Kavehnegar');
-            $providerName = "\\App\\SMSProviders\\" . $smsGateways[$configProvider] . "Provider";
-            $filePath = base_path() . "/SMSProviders/" . $smsGateways[$configProvider] . "Provider.php";
+            $configProvider = Str::ucfirst($configProvider);
+
+            $providerName = "\\App\\SMSProviders\\" . $configProvider . "Provider";
+            $filePath = base_path() . "/SMSProviders/" . $configProvider . "Provider.php";
 
             if (!file_exists($filePath)) {
                 throwException(
@@ -42,6 +41,7 @@ class SMSGatewayProvider extends ServiceProvider
         $this->app->bind(SMSGatewayRepositoryInterface::class, SMSGatewayRepository::class);
         $this->app->singleton(SMSGatewayResultInterface::class, SMSGatewayResult::class);
     }
+
 
     /**
      * Bootstrap services.

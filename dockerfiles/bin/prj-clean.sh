@@ -1,8 +1,9 @@
 #!/bin/bash
 
-rm -Rf storage/data
+rm -Rf dockerfiles/config/mysql/data/*
+rm -Rf dockerfiles/config/redis/data/*
 rm -Rf node_modules/
 rm -Rf vendor/
-rm -Rf public/assets
 rm public/mix-manifest.json
 rm composer.lock
+rm .env

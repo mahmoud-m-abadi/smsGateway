@@ -83,6 +83,7 @@ RUN apk add --no-cache freetype libpng libjpeg-turbo freetype-dev libpng-dev lib
 RUN pear config-set php_bin /usr/local/bin/php
 RUN pear install php_codesniffer
 WORKDIR $HOME/sms
+RUN apk add npm
 RUN apk add --no-cache supervisor
 RUN pecl install redis \
     && docker-php-ext-enable redis

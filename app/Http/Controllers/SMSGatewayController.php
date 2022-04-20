@@ -3,20 +3,42 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SendSMSGatewayRequest;
+use App\Http\Resources\SMSGatewayResource;
+use App\Interfaces\Repositories\SMSGatewayRepositoryInterface;
 use App\Jobs\SMSGatewayJob;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
 
 class SMSGatewayController extends Controller
 {
-    public function __construct()
+    private SMSGatewayRepositoryInterface $repository;
+
+    public function __construct(SMSGatewayRepositoryInterface $repository)
     {
+        $this->repository = $repository;
     }
 
-    public function list()
+    /**
+     * @return View
+     */
+    public function listForWeb(): View
     {
+        return view('dashboard', [
+            'items' => $this->repository->paginate()
+        ]);
+    }
 
+    /**
+     * @return AnonymousResourceCollection
+     */
+    public function list(): AnonymousResourceCollection
+    {
+        return SMSGatewayResource::collection(
+            $this->repository->paginate()
+        );
     }
 
     /**

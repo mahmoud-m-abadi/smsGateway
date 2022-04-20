@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sms_gateway_results', function (Blueprint $table) {
             $table->id();
             $table->string('to', 20)->index();
-            $table->string('provider_id', 30)->index();
+            $table->string('provider', 30)->index();
             $table->json('result')->nullable();
             $table->smallInteger('status_code')->default(200);
             $table->timestamps();
