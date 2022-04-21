@@ -6,9 +6,6 @@ supervisorctl start all
 # Install dependencies
 composer install --prefer-dist --no-interaction
 
-# Show outdated composer dependencies
-composer outdated
-
 # Make .env file
 cp .env.example .env
 
@@ -26,4 +23,4 @@ php artisan db:seed
 npm install && npm run dev
 
 # Execute PHPUnit tests
-vendor/bin/phpunit
+php artisan test

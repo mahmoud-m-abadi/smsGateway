@@ -27,13 +27,11 @@ class SMSGatewayProvider extends ServiceProvider
             $configProvider = Str::ucfirst($configProvider);
 
             $providerName = "\\App\\SMSProviders\\" . $configProvider . "Provider";
-            $filePath = base_path() . "/SMSProviders/" . $configProvider . "Provider.php";
 
-            if (!file_exists($filePath)) {
-                throwException(
-                    new \Exception("There is no such provider, please contact administrator")
-                );
-            }
+            throw_if(
+                !class_exists($providerName),
+                new \Exception("There is no such provider, please contact administrator")
+            );
 
             return new $providerName();
         });

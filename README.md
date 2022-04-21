@@ -8,7 +8,7 @@
   - Run `docker exec -it sms_gateway_php supervisorctl restart all`
 
 ## Usage
-- to see the website: http://localhost:82
+- To see the website: http://localhost:82
   - The project has LOGIN panel and another feature as authentication system.
   - Authentication info:
     - email: `admin@email.com`
@@ -16,3 +16,7 @@
 - To see the **Horizon** dashboard (to manage queues) http://localhost:82/horizon
 - The API webservice sample exists in root of the project (SMSGateway.postman_collection.json)
   - There is no authentication in REST API and all routes work without it.
+
+## Adding a new SMS Provider
+- You can find relevant providers in **app/SMSProviders** folder. You can add a new provider there with this pattern in name ( {Name}Provider.php )
+- Then put the desired name in the .env file for SMS_PROVIDER key like I added that sample.

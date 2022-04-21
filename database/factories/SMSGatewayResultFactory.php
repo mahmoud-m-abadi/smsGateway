@@ -17,7 +17,10 @@ class SMSGatewayResultFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'to' => $this->faker->phoneNumber,
+            'provider' => $this->faker->company,
+            'result' => ['status' => 200, 'message' => 'sent successfully'],
+            'status_code' => 200
         ];
     }
 }
